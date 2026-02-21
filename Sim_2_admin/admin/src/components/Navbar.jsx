@@ -2,64 +2,48 @@ import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 import { TrendingUp } from "lucide-react";
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const { logout } = useAuth();
 
   return (
-    <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary ">
-        <div className="container-fluid ">
-          <Link to="/" className="flex items-center space-x-2">
-            <TrendingUp className="w-8 h-8 text-emerald-600" />
-            <span className="fw-bold fs-4  pl-5 text-decoration-none text-slate-900">TradeAcademy </span>
-          </Link>
+    <nav className="navbar navbar-expand-lg border-bottom bg-white sticky-top">
+      <div className="container-fluid">
+        <button className="btn btn-link link-dark d-lg-none me-2" onClick={toggleSidebar}>
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+        <Link to="/" className="navbar-brand fw-bold d-flex align-items-center me-auto">
+          <TrendingUp className="w-6 h-6 text-emerald-600 me-2" />
+          <span>TradeAcademy</span>
+        </Link>
 
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav  ms-auto  gap-2">
-              <li className="nav-item">
-                <Link className="nav-link active  " to="/">
-                  Home
-                </Link>
-              </li>
+        {/* <button
+          className="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button> */}
 
-              <li className="nav-item ">
-                <Link className="nav-link" to="/admin/users">
-                  Users
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link className="nav-link " to="/admin/groups">
-                  Groups
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/admin/results">
-                  Results
-                </Link>
-              </li>
-              <li className="nav-item  ">
-                <button onClick={logout} className="btn btn-danger ms-auto ">
-                  Logout
-                </button>
-              </li>
-            </ul>
-          </div>
+        <div className="collapse navbar-collapse" id="navbarContent">
+          <ul className="navbar-nav ms-auto gap-2 align-items-center mt-3 mt-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <button onClick={logout} className="btn btn-outline-danger btn-sm">
+                Logout
+              </button>
+            </li>
+          </ul>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 

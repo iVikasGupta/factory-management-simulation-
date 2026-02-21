@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/sidebar";
 
 const Groups = () => {
   const [groups, setGroups] = useState([]);
@@ -138,190 +136,184 @@ const Groups = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-      <div style={{ flex: 1 }}>
-        <Navbar />
-        <div style={{ padding: "20px" }}>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>👥 Group Management</h2>
-            <div>
-              <button className="btn btn-success me-2" onClick={() => setShowCreateModal(true)}>
-                ➕ Create Group
-              </button>
-              <button className="btn btn-primary" onClick={fetchGroups}>
-                🔄 Refresh
-              </button>
-            </div>
-          </div>
-
-          {/* Stats Cards */}
-          {stats && (
-            <div className="row mb-4">
-              <div className="col-md-2">
-                <div className="card bg-primary text-white">
-                  <div className="card-body text-center">
-                    <h5>Total Groups</h5>
-                    <h2>{stats.totalGroups}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="card bg-success text-white">
-                  <div className="card-body text-center">
-                    <h5>Locked</h5>
-                    <h2>{stats.lockedGroups}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="card bg-warning text-dark">
-                  <div className="card-body text-center">
-                    <h5>Unlocked</h5>
-                    <h2>{stats.unlockedGroups}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="card bg-info text-white">
-                  <div className="card-body text-center">
-                    <h5>Full Groups</h5>
-                    <h2>{stats.fullGroups}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="card bg-secondary text-white">
-                  <div className="card-body text-center">
-                    <h5>Players</h5>
-                    <h2>{stats.totalPlayersInGroups}</h2>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="card bg-dark text-white">
-                  <div className="card-body text-center">
-                    <h5>Available</h5>
-                    <h2>{availableUsers.length}</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {error && <div className="alert alert-danger">{error}</div>}
-
-          {loading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status"></div>
-              <p className="mt-2">Loading groups...</p>
-            </div>
-          ) : (
-            <div className="row">
-              {groups.length === 0 ? (
-                <div className="col-12">
-                  <div className="alert alert-info">
-                    No groups created yet. Click "Create Group" to get started.
-                  </div>
-                </div>
-              ) : (
-                groups.map((group) => (
-                  <div key={group._id} className="col-md-4 mb-4">
-                    <div className={`card ${group.locked ? "border-success" : "border-warning"}`}>
-                      <div className={`card-header d-flex justify-content-between align-items-center ${group.locked ? "bg-success text-white" : "bg-warning text-dark"}`}>
-                        <h5 className="mb-0">
-                          {group.locked ? "🔒" : "🔓"} {group.name}
-                        </h5>
-                        <span className="badge bg-light text-dark">
-                          {group.players.length}/{group.maxPlayers}
-                        </span>
-                      </div>
-                      <div className="card-body">
-                        <p className="text-muted small mb-2">
-                          Session: {group.sessionId?.substring(0, 8)}...
-                        </p>
-
-                        {/* Players List */}
-                        <h6>Players:</h6>
-                        {group.players.length === 0 ? (
-                          <p className="text-muted">No players assigned</p>
-                        ) : (
-                          <ul className="list-group list-group-flush mb-3">
-                            {group.players.map((player) => (
-                              <li key={player._id} className="list-group-item d-flex justify-content-between align-items-center py-2">
-                                <div>
-                                  <strong>{player.name}</strong>
-                                  <br />
-                                  <small className="text-muted">{player.email}</small>
-                                </div>
-                                {!group.locked && (
-                                  <button
-                                    className="btn btn-outline-danger btn-sm"
-                                    onClick={() => handleRemoveUser(group._id, player._id)}
-                                  >
-                                    ✕
-                                  </button>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        {/* Progress Bar */}
-                        <div className="progress mb-3" style={{ height: "8px" }}>
-                          <div
-                            className={`progress-bar ${group.players.length >= group.maxPlayers ? "bg-success" : "bg-primary"}`}
-                            style={{ width: `${(group.players.length / group.maxPlayers) * 100}%` }}
-                          ></div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="d-flex flex-wrap gap-2">
-                          {!group.locked && group.players.length < group.maxPlayers && (
-                            <button
-                              className="btn btn-primary btn-sm"
-                              onClick={() => openAddUserModal(group)}
-                            >
-                              ➕ Add User
-                            </button>
-                          )}
-                          {!group.locked && group.players.length > 0 && (
-                            <button
-                              className="btn btn-success btn-sm"
-                              onClick={() => handleLockGroup(group._id)}
-                            >
-                              🔒 Lock
-                            </button>
-                          )}
-                          {group.locked && (
-                            <button
-                              className="btn btn-warning btn-sm"
-                              onClick={() => handleUnlockGroup(group._id)}
-                            >
-                              🔓 Unlock
-                            </button>
-                          )}
-                          {!group.locked && (
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() => handleDeleteGroup(group._id)}
-                            >
-                              🗑️ Delete
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                      <div className="card-footer text-muted small">
-                        Created: {new Date(group.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+    <div>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>👥 Group Management</h2>
+        <div>
+          <button className="btn btn-success me-2" onClick={() => setShowCreateModal(true)}>
+            ➕ Create Group
+          </button>
+          <button className="btn btn-primary" onClick={fetchGroups}>
+            🔄 Refresh
+          </button>
         </div>
       </div>
+
+      {/* Stats Cards */}
+      {stats && (
+        <div className="row mb-4">
+          <div className="col-md-2">
+            <div className="card bg-primary text-white">
+              <div className="card-body text-center">
+                <h5>Total Groups</h5>
+                <h2>{stats.totalGroups}</h2>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="card bg-success text-white">
+              <div className="card-body text-center">
+                <h5>Locked</h5>
+                <h2>{stats.lockedGroups}</h2>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="card bg-warning text-dark">
+              <div className="card-body text-center">
+                <h5>Unlocked</h5>
+                <h2>{stats.unlockedGroups}</h2>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="card bg-info text-white">
+              <div className="card-body text-center">
+                <h5>Full Groups</h5>
+                <h2>{stats.fullGroups}</h2>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="card bg-secondary text-white">
+              <div className="card-body text-center">
+                <h5>Players</h5>
+                <h2>{stats.totalPlayersInGroups}</h2>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="card bg-dark text-white">
+              <div className="card-body text-center">
+                <h5>Available</h5>
+                <h2>{availableUsers.length}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status"></div>
+          <p className="mt-2">Loading groups...</p>
+        </div>
+      ) : (
+        <div className="row">
+          {groups.length === 0 ? (
+            <div className="col-12">
+              <div className="alert alert-info">
+                No groups created yet. Click "Create Group" to get started.
+              </div>
+            </div>
+          ) : (
+            groups.map((group) => (
+              <div key={group._id} className="col-md-4 mb-4">
+                <div className={`card ${group.locked ? "border-success" : "border-warning"}`}>
+                  <div className={`card-header d-flex justify-content-between align-items-center ${group.locked ? "bg-success text-white" : "bg-warning text-dark"}`}>
+                    <h5 className="mb-0">
+                      {group.locked ? "🔒" : "🔓"} {group.name}
+                    </h5>
+                    <span className="badge bg-light text-dark">
+                      {group.players.length}/{group.maxPlayers}
+                    </span>
+                  </div>
+                  <div className="card-body">
+                    <p className="text-muted small mb-2">
+                      Session: {group.sessionId?.substring(0, 8)}...
+                    </p>
+
+                    {/* Players List */}
+                    <h6>Players:</h6>
+                    {group.players.length === 0 ? (
+                      <p className="text-muted">No players assigned</p>
+                    ) : (
+                      <ul className="list-group list-group-flush mb-3">
+                        {group.players.map((player) => (
+                          <li key={player._id} className="list-group-item d-flex justify-content-between align-items-center py-2">
+                            <div>
+                              <strong>{player.name}</strong>
+                              <br />
+                              <small className="text-muted">{player.email}</small>
+                            </div>
+                            {!group.locked && (
+                              <button
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => handleRemoveUser(group._id, player._id)}
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {/* Progress Bar */}
+                    <div className="progress mb-3" style={{ height: "8px" }}>
+                      <div
+                        className={`progress-bar ${group.players.length >= group.maxPlayers ? "bg-success" : "bg-primary"}`}
+                        style={{ width: `${(group.players.length / group.maxPlayers) * 100}%` }}
+                      ></div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="d-flex flex-wrap gap-2">
+                      {!group.locked && group.players.length < group.maxPlayers && (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => openAddUserModal(group)}
+                        >
+                          ➕ Add User
+                        </button>
+                      )}
+                      {!group.locked && group.players.length > 0 && (
+                        <button
+                          className="btn btn-success btn-sm"
+                          onClick={() => handleLockGroup(group._id)}
+                        >
+                          🔒 Lock
+                        </button>
+                      )}
+                      {group.locked && (
+                        <button
+                          className="btn btn-warning btn-sm"
+                          onClick={() => handleUnlockGroup(group._id)}
+                        >
+                          🔓 Unlock
+                        </button>
+                      )}
+                      {!group.locked && (
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeleteGroup(group._id)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="card-footer text-muted small">
+                    Created: {new Date(group.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {/* Create Group Modal */}
       {showCreateModal && (
@@ -386,7 +378,7 @@ const Groups = () => {
                 <p className="text-muted">
                   Available slots: {selectedGroup.maxPlayers - selectedGroup.players.length}
                 </p>
-                
+
                 {availableUsers.length === 0 ? (
                   <div className="alert alert-info">
                     No available users. All students are already assigned to groups.

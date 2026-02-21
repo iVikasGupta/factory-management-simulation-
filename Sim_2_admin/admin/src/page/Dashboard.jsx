@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/sidebar";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -35,139 +33,153 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-      <div style={{ flex: 1 }}>
-        <Navbar />
-        <div style={{ padding: "20px" }}>
-          <h1>Welcome to Admin Dashboard!</h1>
-          <p className="text-muted">Factory Management Simulation - Admin Panel</p>
+    <div>
+      <h1 className="h3 mb-2 text-gray-800">Welcome to Admin Dashboard!</h1>
+      <p className="mb-4 text-muted">Factory Management Simulation - Admin Panel</p>
 
-          {/* Stats Cards */}
-          {loading ? (
-            <div className="text-center py-4">
-              <div className="spinner-border text-primary" role="status"></div>
-            </div>
-          ) : stats ? (
-            <div className="row my-4">
-              <div className="col-md-3 mb-3">
-                <div className="card bg-primary text-white h-100">
-                  <div className="card-body">
-                    <h5 className="card-title">👤 Total Users</h5>
-                    <h2>{stats.users?.total || 0}</h2>
-                    <Link to="/admin/users" className="text-white">View All →</Link>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3 mb-3">
-                <div className="card bg-success text-white h-100">
-                  <div className="card-body">
-                    <h5 className="card-title">📊 Submissions</h5>
-                    <h2>{stats.submissions?.total || 0}</h2>
-                    <Link to="/admin/results" className="text-white">View All →</Link>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3 mb-3">
-                <div className="card bg-info text-white h-100">
-                  <div className="card-body">
-                    <h5 className="card-title">👥 Groups</h5>
-                    <h2>{groupStats?.totalGroups || 0}</h2>
-                    <Link to="/admin/groups" className="text-white">Manage →</Link>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-3 mb-3">
-                <div className="card bg-warning text-dark h-100">
-                  <div className="card-body">
-                    <h5 className="card-title">🔒 Locked Groups</h5>
-                    <h2>{groupStats?.lockedGroups || 0}</h2>
-                    <small>Ready to play</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Group Stats */}
-          {groupStats && (
-            <div className="card mb-4">
-              <div className="card-header">
-                <h5 className="mb-0">👥 Group Overview</h5>
-              </div>
+      {/* Stats Cards */}
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status"></div>
+        </div>
+      ) : stats ? (
+        <div className="row">
+          <div className="col-xl-3 col-md-6 mb-4">
+            <div className="card bg-primary text-white shadow h-100">
               <div className="card-body">
-                <div className="row text-center">
-                  <div className="col">
-                    <h3 className="text-primary">{groupStats.totalGroups}</h3>
-                    <small>Total Groups</small>
-                  </div>
-                  <div className="col">
-                    <h3 className="text-success">{groupStats.lockedGroups}</h3>
-                    <small>Locked</small>
-                  </div>
-                  <div className="col">
-                    <h3 className="text-warning">{groupStats.unlockedGroups}</h3>
-                    <small>Unlocked</small>
-                  </div>
-                  <div className="col">
-                    <h3 className="text-info">{groupStats.totalPlayersInGroups}</h3>
-                    <small>Players Assigned</small>
-                  </div>
-                  <div className="col">
-                    <h3 className="text-secondary">{groupStats.fullGroups}</h3>
-                    <small>Full Groups</small>
+                <div className="row no-gutters align-items-center">
+                  <div className="col mr-2">
+                    <div className="text-xs font-weight-bold text-uppercase mb-1">Total Users</div>
+                    <div className="h5 mb-0 font-weight-bold">{stats.users?.total || 0}</div>
+                    <Link to="/admin/users" className="text-white-50 small stretched-link">View All →</Link>
                   </div>
                 </div>
               </div>
             </div>
-          )}
-
-          {/* Submissions by Level */}
-          {stats?.submissions && (
-            <div className="card mb-4">
-              <div className="card-header">
-                <h5 className="mb-0">📈 Submissions by Level</h5>
-              </div>
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4">
+            <div className="card bg-success text-white shadow h-100">
               <div className="card-body">
-                <div className="row">
-                  {[1, 2, 3, 4, 5].map((level) => (
-                    <div key={level} className="col">
-                      <div className="text-center p-3 border rounded">
-                        <h4>Level {level}</h4>
-                        <h2 className="text-primary">{stats.submissions[`level${level}`] || 0}</h2>
-                      </div>
-                    </div>
-                  ))}
+                <div className="row no-gutters align-items-center">
+                  <div className="col mr-2">
+                    <div className="text-xs font-weight-bold text-uppercase mb-1">Submissions</div>
+                    <div className="h5 mb-0 font-weight-bold">{stats.submissions?.total || 0}</div>
+                    <Link to="/admin/results" className="text-white-50 small stretched-link">View All →</Link>
+                  </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4">
+            <div className="card bg-info text-white shadow h-100">
+              <div className="card-body">
+                <div className="row no-gutters align-items-center">
+                  <div className="col mr-2">
+                    <div className="text-xs font-weight-bold text-uppercase mb-1">Groups</div>
+                    <div className="h5 mb-0 font-weight-bold">{groupStats?.totalGroups || 0}</div>
+                    <Link to="/admin/groups" className="text-white-50 small stretched-link">Manage →</Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-3 col-md-6 mb-4">
+            <div className="card bg-warning text-dark shadow h-100">
+              <div className="card-body">
+                <div className="row no-gutters align-items-center">
+                  <div className="col mr-2">
+                    <div className="text-xs font-weight-bold text-uppercase mb-1">Locked Groups</div>
+                    <div className="h5 mb-0 font-weight-bold">{groupStats?.lockedGroups || 0}</div>
+                    <small className="text-dark-50">Ready to play</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
-          {/* Quick Links */}
-          <div className="card">
-            <div className="card-header">
-              <h5 className="mb-0">🔗 Quick Links</h5>
+      {/* Group Stats */}
+      {groupStats && (
+        <div className="card shadow mb-4">
+          <div className="card-header py-3">
+            <h6 className="m-0 font-weight-bold text-primary">Groups Overview</h6>
+          </div>
+          <div className="card-body">
+            <div className="row text-center">
+              <div className="col-6 col-md-4 col-lg-2 mb-3">
+                <h4 className="text-primary">{groupStats.totalGroups}</h4>
+                <div className="small text-muted">Total Groups</div>
+              </div>
+              <div className="col-6 col-md-4 col-lg-2 mb-3">
+                <h4 className="text-success">{groupStats.lockedGroups}</h4>
+                <div className="small text-muted">Locked</div>
+              </div>
+              <div className="col-6 col-md-4 col-lg-2 mb-3">
+                <h4 className="text-warning">{groupStats.unlockedGroups}</h4>
+                <div className="small text-muted">Unlocked</div>
+              </div>
+              <div className="col-6 col-md-4 col-lg-2 mb-3">
+                <h4 className="text-info">{groupStats.totalPlayersInGroups}</h4>
+                <div className="small text-muted">Players</div>
+              </div>
+              <div className="col-6 col-md-4 col-lg-2 mb-3">
+                <h4 className="text-secondary">{groupStats.fullGroups}</h4>
+                <div className="small text-muted">Full</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Submissions by Level */}
+      {stats?.submissions && (
+        <div className="card shadow mb-4">
+          <div className="card-header py-3">
+            <h6 className="m-0 font-weight-bold text-primary">Submissions by Level</h6>
+          </div>
+          <div className="card-body">
+            <div className="row">
+              {[1, 2, 3, 4, 5].map((level) => (
+                <div key={level} className="col-6 col-md mb-2">
+                  <div className="text-center p-3 border rounded bg-light">
+                    <div className="small text-muted mb-1">Level {level}</div>
+                    <h5 className="mb-0 text-primary">{stats.submissions[`level${level}`] || 0}</h5>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Links */}
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="card shadow mb-4">
+            <div className="card-header py-3">
+              <h6 className="m-0 font-weight-bold text-primary">Quick Actions</h6>
             </div>
             <div className="card-body">
               <div className="row">
-                <div className="col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-2">
                   <Link to="/admin/users" className="btn btn-outline-primary w-100 py-3">
-                    👤 User Management
+                    User Management
                   </Link>
                 </div>
-                <div className="col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-2">
                   <Link to="/admin/groups" className="btn btn-outline-info w-100 py-3">
-                    👥 Group Management
+                    Group Management
                   </Link>
                 </div>
-                <div className="col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-2">
                   <Link to="/admin/results" className="btn btn-outline-success w-100 py-3">
-                    📊 View Results
+                    View Results
                   </Link>
                 </div>
-                <div className="col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-2">
                   <button className="btn btn-outline-secondary w-100 py-3" onClick={() => { fetchStats(); fetchGroupStats(); }}>
-                    🔄 Refresh Stats
+                    Refresh Stats
                   </button>
                 </div>
               </div>

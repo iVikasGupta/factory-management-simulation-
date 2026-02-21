@@ -11,6 +11,8 @@ import Groups from "./page/Groups";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
+import AdminLayout from "./components/AdminLayout";
+
 function App() {
   return (
     <AuthProvider>
@@ -25,7 +27,9 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <AdminLayout>
+                <Dashboard />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
@@ -33,7 +37,9 @@ function App() {
           path="/admin/users"
           element={
             <ProtectedRoute>
-              <Users />
+              <AdminLayout>
+                <Users />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
@@ -41,7 +47,9 @@ function App() {
           path="/admin/results"
           element={
             <ProtectedRoute>
-              <Results />
+              <AdminLayout>
+                <Results />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />
@@ -49,7 +57,9 @@ function App() {
           path="/admin/groups"
           element={
             <ProtectedRoute>
-              <Groups />
+              <AdminLayout>
+                <Groups />
+              </AdminLayout>
             </ProtectedRoute>
           }
         />

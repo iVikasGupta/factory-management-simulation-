@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/sidebar";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -132,96 +130,89 @@ const Users = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-
-      <div style={{ flex: 1 }}>
-        <Navbar />
-
-        <div style={{ padding: "20px" }}>
-          {/* Header */}
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>👤 User Management</h2>
-            <div>
-              <button className="btn btn-success me-2" onClick={() => setShowCreateModal(true)}>
-                ➕ Create User
-              </button>
-              <button className="btn btn-primary" onClick={fetchUsers}>
-                🔄 Refresh
-              </button>
-            </div>
-          </div>
-
-          {/* Error */}
-          {error && <div className="alert alert-danger">{error}</div>}
-
-          {/* Loading */}
-          {loading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status" />
-              <p className="mt-2">Loading users...</p>
-            </div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-striped table-hover">
-                <thead className="table-dark">
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Created At</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {users.length === 0 ? (
-                    <tr>
-                      <td colSpan="6" className="text-center py-4">
-                        No users found
-                      </td>
-                    </tr>
-                  ) : (
-                    users.map((user, index) => (
-                      <tr key={user._id}>
-                        <td>{index + 1}</td>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                        <td>
-                          <select
-                            className="form-select form-select-sm"
-                            value={user.role}
-                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                            style={{ width: "120px" }}
-                          >
-                            <option value="student">Student</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="admin">Admin</option>
-                          </select>
-                        </td>                        <td>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
-                        <td>
-                          <button 
-                            className="btn btn-warning btn-sm me-2" 
-                            onClick={() => openPasswordModal(user)}
-                          >
-                            🔑 Password
-                          </button>
-                          <button className="btn btn-danger btn-sm" onClick={() => handleDeleteUser(user._id)}>
-                            🗑️ Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          <p className="text-muted mt-3">Total Users: {users.length}</p>
+    <div>
+      {/* Header */}
+      {/* Header */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>👤 User Management</h2>
+        <div>
+          <button className="btn btn-success me-2" onClick={() => setShowCreateModal(true)}>
+            ➕ Create User
+          </button>
+          <button className="btn btn-primary" onClick={fetchUsers}>
+            🔄 Refresh
+          </button>
         </div>
       </div>
+
+      {/* Error */}
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {/* Loading */}
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status" />
+          <p className="mt-2">Loading users...</p>
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-4">
+                    No users found
+                  </td>
+                </tr>
+              ) : (
+                users.map((user, index) => (
+                  <tr key={user._id}>
+                    <td>{index + 1}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>
+                      <select
+                        className="form-select form-select-sm"
+                        value={user.role}
+                        onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                        style={{ width: "120px" }}
+                      >
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </td>                        <td>{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</td>
+                    <td>
+                      <button
+                        className="btn btn-warning btn-sm me-2"
+                        onClick={() => openPasswordModal(user)}
+                      >
+                        🔑 Password
+                      </button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDeleteUser(user._id)}>
+                        🗑️ Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <p className="text-muted mt-3">Total Users: {users.length}</p>
 
       {/* ================= Create User Modal ================= */}
       {showCreateModal && (
@@ -285,7 +276,8 @@ const Users = () => {
                   </button>
                   <button type="submit" className="btn btn-success" disabled={creating}>
                     {creating ? "Creating..." : "Create User"}
-                  </button>                </div>
+                  </button>
+                </div>
               </form>
             </div>
           </div>
